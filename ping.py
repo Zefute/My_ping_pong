@@ -3,8 +3,8 @@ from pygame import *
 
 
 class GameSprite(sprite.Sprite):
-    def __init__(self, player_image, player_x, player_y, player_speed):
-        self.image = transform.scale(image.load(player_image), (50,50))
+    def __init__(self, player_image, player_x, player_y, w, h, player_speed):
+        self.image = transform.scale(image.load(player_image), (w,h))
         self.speed = player_speed
         self.rect = self.image.get_rect()
         self.rect.x = player_x
@@ -13,11 +13,18 @@ class GameSprite(sprite.Sprite):
         window.blit(self.image, (self.rect.x, self.rect.y))
 
 class Player(GameSprite):
-    def update(self):
+    def update_right(self):
         keys_pressed = key.get_pressed()
         if keys_pressed[K_s] and self.rect.y < 500:
             self.rect.y += self.speed
         if keys_pressed[K_w] and self.rect.y > 5:
+            self.rect.y -= self.speed
+    
+    def update_left(self):
+        keys_pressed = key.get_pressed()
+        if keys_pressed[K_DOWN] and self.rect.y < 500:
+            self.rect.y += self.speed
+        if keys_pressed[K_UP] and self.rect.y > 5:
             self.rect.y -= self.speed
 
 
@@ -32,6 +39,10 @@ font1 = font.SysFont(None, 70)
 win = font1.render('YOU WIN!', True, (255, 215, 0))
 lose = font1.render('YOU LOSE!', True, (255, 0, 0))
 
+#создвем два класса
+player1 = Player('rocket.png', 0, 200, 50, 90, 5)
+player2 = Player('rocket.png', 650, 200, 50, 90, 5)
+
 
 game = True
 finish = False
@@ -44,6 +55,9 @@ while game:
             game = False
     if finish != True:
         window.blit(background,(0,0))
-
+        player1.update_right()
+        player2.update_left()
+        player1.reset()
+        player2.reset()
     clock.tick(FPS)
     display.update()
