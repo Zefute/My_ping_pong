@@ -15,16 +15,16 @@ class GameSprite(sprite.Sprite):
 class Player(GameSprite):
     def update_right(self):
         keys_pressed = key.get_pressed()
-        if keys_pressed[K_s] and self.rect.y < 500:
+        if keys_pressed[K_s] and self.rect.y < 410:
             self.rect.y += self.speed
-        if keys_pressed[K_w] and self.rect.y > 5:
+        if keys_pressed[K_w] and self.rect.y > 0:
             self.rect.y -= self.speed
     
     def update_left(self):
         keys_pressed = key.get_pressed()
-        if keys_pressed[K_DOWN] and self.rect.y < 500:
+        if keys_pressed[K_DOWN] and self.rect.y < 410:
             self.rect.y += self.speed
-        if keys_pressed[K_UP] and self.rect.y > 5:
+        if keys_pressed[K_UP] and self.rect.y > 0:
             self.rect.y -= self.speed
 
 
@@ -35,12 +35,12 @@ background = transform.scale(image.load('table.png'),(700,500))
 #Создаем текстовые оповещения
 font.init()
 font1 = font.SysFont(None, 70)
-win = font1.render('YOU WIN!', True, (255, 215, 0))
-lose = font1.render('YOU LOSE!', True, (255, 0, 0))
+win = font1.render('WIN Player2!', True, (255, 215, 0))
+lose = font1.render('WIN Player1!', True, (255, 215, 0))
 
 #создвем два класса
-player1 = Player('rocket.png', 0, 200, 50, 90, 5)
-player2 = Player('rocket.png', 650, 200, 50, 90, 5)
+player1 = Player('rocket.png', 10, 200, 50, 90, 5)
+player2 = Player('rocket.png', 640, 200, 50, 90, 5)
 
 #мячик)))
 ball = GameSprite('ball.png', 325 , 225 , 50, 50, 0)
@@ -69,5 +69,9 @@ while game:
             speed_y *= -1
         if sprite.collide_rect(player1,ball) or sprite.collide_rect(player2,ball):
             speed_x *=-1
+        if ball.rect.x < 0:
+            window.blit(win, (200,200))
+        if ball.rect.x > 650:
+            window.blit(lose, (200,200))
     clock.tick(FPS)
     display.update()
