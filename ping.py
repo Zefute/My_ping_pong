@@ -28,7 +28,6 @@ class Player(GameSprite):
             self.rect.y -= self.speed
 
 
-
 window = display.set_mode((700,500))
 display.set_caption('Поймай, если сможешь!!!')
 background = transform.scale(image.load('table.png'),(700,500))
@@ -43,6 +42,10 @@ lose = font1.render('YOU LOSE!', True, (255, 0, 0))
 player1 = Player('rocket.png', 0, 200, 50, 90, 5)
 player2 = Player('rocket.png', 650, 200, 50, 90, 5)
 
+#мячик)))
+ball = GameSprite('ball.png', 325 , 225 , 50, 50, 0)
+speed_x = 3
+speed_y = 3
 
 game = True
 finish = False
@@ -59,5 +62,12 @@ while game:
         player2.update_left()
         player1.reset()
         player2.reset()
+        ball.rect.x += speed_x
+        ball.rect.y += speed_y
+        ball.reset()
+        if ball.rect.y > 450 or ball.rect.y < 0:
+            speed_y *= -1
+        if sprite.collide_rect(player1,ball) or sprite.collide_rect(player2,ball):
+            speed_x *=-1
     clock.tick(FPS)
     display.update()
